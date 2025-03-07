@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.2.0/dist/signature_pad.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+    <style>
+      :root {
+        --primary-color: #F9A610;
+      }
+
+      body {
+        background-color: lightgray;
+        margin-top: 2%;
+        margin-bottom: 2%;
+        min-height: 1000px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      img {
+        max-width: 100%;
+        height: 100%;
+      }
+
+      .main-container {
+        padding: 3% 1% 3% 1%;
+        width: 100%;
+        min-height: 1000px;
+        background-color: white;
+        box-shadow: 1px 1px 7px 2px rgba(122, 109, 109, 0.75);
+        -webkit-box-shadow: 1px 1px 7px 2px rgba(122, 109, 109, 0.75);
+        -moz-box-shadow: 1px 1px 7px 2px rgba(122, 109, 109, 0.75);
+        display: block;
+      }
+
+      .company-info-container {}
+
+      .company-logo-container {
+        display: grid;
+      }
+
+      .company-logo {
+        justify-self: flex-end;
+      }
+
+      .no-margin {
+        margin: 0 !important;
+      }
+
+      .no-padding {
+        padding: 0 !important;
+      }
+
+      /* Base styles (Mobile first) */
+      .font-m {
+        font-family: 'Trebuchet MS', sans-serif;
+        font-size: 16px;
+      }
+
+      .font-s {
+        font-family: 'Trebuchet MS', sans-serif;
+        font-size: 14px;
+      }
+
+      .font-xs {
+        font-family: 'Trebuchet MS', sans-serif;
+        font-size: 12px;
+      }
+
+      .font-xxs {
+        font-family: 'Trebuchet MS', sans-serif;
+        font-size: 10px;
+      }
+
+      /* Tablet styles */
+      @media screen and (min-width: 768px) and (max-width: 1023px) {
+        .font-m {
+          font-size: 18px;
+        }
+
+        .font-s {
+          font-size: 16px;
+        }
+
+        .font-xs {
+          font-size: 14px;
+        }
+
+        .font-xxs {
+          font-size: 12px;
+        }
+      }
+
+      /* PC styles */
+      @media screen and (min-width: 1024px) {
+        .font-m {
+          font-size: 20px;
+        }
+
+        .font-s {
+          font-size: 18px;
+        }
+
+        .font-xs {
+          font-size: 16px;
+        }
+
+        .font-xxs {
+          font-size: 14px;
+        }
+      }
+
+      .font-bold {
+        font-weight: bold;
+      }
+
+      .color-primary {
+        color: var(--primary-color) !important;
+      }
+
+      .defaultRow .deleteRowBtn {
+        display: none;
+      }
+
+      .signature-pad--body {
+        position: relative;
+        -webkit-box-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        border: 1px solid #d9d9d9;
+        height: 150px;
+      }
+
+      .signature-pad--body canvas {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .datepicker {
+        border-radius: 0 !important;
+      }
+
+      .loader-wrapper {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.8);
+        /* Semi-transparent background */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        /* Ensure it covers all other elements */
+      }
+
+      .circle {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: var(--primary-color);
+        left: 15%;
+        transform-origin: 50%;
+        margin-left: 10px;
+        animation: circle7124 .5s alternate infinite ease;
+      }
+
+      @keyframes circle7124 {
+        0% {
+          top: 60px;
+          height: 5px;
+          border-radius: 50px 50px 25px 25px;
+          transform: scaleX(1.7);
+        }
+
+        40% {
+          height: 20px;
+          border-radius: 50%;
+          transform: scaleX(1);
+        }
+
+        100% {
+          top: 0%;
+        }
+      }
+
+      .circle:nth-child(2) {
+        left: 45%;
+        animation-delay: .2s;
+      }
+
+      .circle:nth-child(3) {
+        left: auto;
+        right: 15%;
+        animation-delay: .3s;
+      }
+
+      .card {
+        width: 330px;
+        height: 80px;
+        border-radius: 8px;
+        box-sizing: border-box;
+        padding: 10px 15px;
+        background-color: #ffffff;
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        gap: 15px;
+      }
+
+      .wave {
+        position: absolute;
+        transform: rotate(90deg);
+        left: -31px;
+        top: 32px;
+        width: 80px;
+        fill: var(--primary-color);
+      }
+
+      .icon-container {
+        width: 35px;
+        height: 35px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--primary-color);
+        border-radius: 50%;
+        margin-left: 8px;
+      }
+
+      .icon {
+        width: 17px;
+        height: 17px;
+        color: #269b24;
+      }
+
+      .message-text-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        flex-grow: 1;
+      }
+
+      .message-text,
+      .sub-text {
+        margin: 0;
+        cursor: default;
+      }
+
+      .message-text {
+        color: var(--primary-color);
+        font-size: 17px;
+        font-weight: 700;
+      }
+
+      .sub-text {
+        font-size: 14px;
+        color: #555;
+      }
+
+      .cross-icon {
+        width: 18px;
+        height: 18px;
+        color: #555;
+        cursor: pointer;
+      }
+
+      .rate {
+        border-bottom-right-radius: 12px;
+        border-bottom-left-radius: 12px
+      }
+
+      .rating {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: center
+      }
+
+      .rating>input {
+        display: none
+      }
+
+      .rating>label {
+        position: relative;
+        width: 1em;
+        font-size: 30px;
+        font-weight: 300;
+        color: #FFD600;
+        cursor: pointer
+      }
+
+      .rating>label::before {
+        content: "★";
+        position: absolute;
+        opacity: 0
+      }
+
+      .rating>label:hover:before,
+      .rating>label:hover~label:before {
+        opacity: 1 !important
+      }
+
+      .rating>input:checked~label:before {
+        opacity: 1
+      }
+
+      .rating:hover>input:checked~label:before {
+        opacity: 0.4
+      }
+
+      .buttons {
+        top: 36px;
+        position: relative
+      }
+
+      .rating-submit {
+        border-radius: 8px;
+        color: #fff;
+        height: auto
+      }
+
+      .rating-submit:hover {
+        color: #fff
+      }
+
+      .reviewed-star {
+        font-size: 30px;
+        color: #FFD600 !important;
+      }
+
+      .unreviewed-star {
+        font-size: 30px;
+        color: #adadad !important;
+      }
+
+      .no-page-break {
+        page-break-inside: avoid;
+      }
+
+      .page-break {
+        page-break-before: always;
+      }
+
+      @media print {
+        .page-break {
+          page-break-before: always;
+        }
+
+        .no-page-break {
+          page-break-inside: avoid;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .table-responsive {
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+      }
+
+      table {
+        border-collapse: collapse !important;
+      }
+
+      table td,
+      table th {
+        border: 1px solid #dee2e6 !important;
+        padding: 0.5rem !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loader" class="loader-wrapper" style="width: 100%; display: none;">
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div id="success-card" class="card" style="display: none;">
+        <svg class="wave" viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,256L11.4,240C22.9,224,46,192,69,192C91.4,192,114,224,137,234.7C160,245,183,235,206,213.3C228.6,192,251,160,274,149.3C297.1,139,320,149,343,181.3C365.7,213,389,267,411,282.7C434.3,299,457,277,480,250.7C502.9,224,526,192,549,181.3C571.4,171,594,181,617,208C640,235,663,277,686,256C708.6,235,731,149,754,122.7C777.1,96,800,128,823,165.3C845.7,203,869,245,891,224C914.3,203,937,117,960,112C982.9,107,1006,181,1029,197.3C1051.4,213,1074,171,1097,144C1120,117,1143,107,1166,133.3C1188.6,160,1211,224,1234,218.7C1257.1,213,1280,139,1303,133.3C1325.7,128,1349,192,1371,192C1394.3,192,1417,128,1429,96L1440,64L1440,320L1428.6,320C1417.1,320,1394,320,1371,320C1348.6,320,1326,320,1303,320C1280,320,1257,320,1234,320C1211.4,320,1189,320,1166,320C1142.9,320,1120,320,1097,320C1074.3,320,1051,320,1029,320C1005.7,320,983,320,960,320C937.1,320,914,320,891,320C868.6,320,846,320,823,320C800,320,777,320,754,320C731.4,320,709,320,686,320C662.9,320,640,320,617,320C594.3,320,571,320,549,320C525.7,320,503,320,480,320C457.1,320,434,320,411,320C388.6,320,366,320,343,320C320,320,297,320,274,320C251.4,320,229,320,206,320C182.9,320,160,320,137,320C114.3,320,91,320,69,320C45.7,320,23,320,11,320L0,320Z" fill-opacity="1"></path>
+        </svg>
+        <div class="icon-container"></div>
+        <div class="message-text-container">
+          <p class="message-text"></p>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" stroke-width="0" fill="none" stroke="currentColor" class="cross-icon">
+          <path fill="currentColor" d="M11.7816 4.03157C12.0062 3.80702 12.0062 3.44295 11.7816 3.2184C11.5571 2.99385 11.193 2.99385 10.9685 3.2184L7.50005 6.68682L4.03164 3.2184C3.80708 2.99385 3.44301 2.99385 3.21846 3.2184C2.99391 3.44295 2.99391 3.80702 3.21846 4.03157L6.68688 7.49999L3.21846 10.9684C2.99391 11.193 2.99391 11.557 3.21846 11.7816C3.44301 12.0061 3.80708 12.0061 4.03164 11.7816L7.50005 8.31316L10.9685 11.7816C11.193 12.0061 11.5571 12.0061 11.7816 11.7816C12.0062 11.557 12.0062 11.193 11.7816 10.9684L8.31322 7.49999L11.7816 4.03157Z" clip-rule="evenodd" fill-rule="evenodd"></path>
+        </svg>
+      </div>
+    </div>
+    <div class="modal fade" id="confirmation-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <h3 id="confirmation-message">
+              </h2>
+          </div>
+          <div class="modal-footer">
+            <button id="btnConfirmModal" type="button" class="btn btn-success">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mb-2 d-flex justify-content-end">
+      <button id="btnSubmit" class="btn btn-primary btn-sm font-m">Submit</button>
+      <button id="btnDownloadPdf" class="btn btn-primary btn-sm font-m" style="margin-left:10px;display:none">Download</button>
+    </div>
+    <div class="main-container col col-12 row no-margin">
+      <div class="col col-12 row no-margin">
+        <div class="company-info col-8">
+          <label class="font-xxs font-bold">PestSol Sdn Bhd <br> (202301006003 (1499922-V)) </label>
+          <br>
+          <label class="font-xxs">No. 34-1, Jalan PUJ 3/8, Taman Puncak, <br> Jalil, Bandar Putra Permai, <br> 43300 Seri Kembangan, Selangor, <br> +6011-6173 1032 <br> pestsol178@gmail.com </label>
+        </div>
+        <div class="company-logo-container col-4">
+          <img id="company-logo" class="company-logo" src="">
+        </div>
+      </div>
+      <div class="col col-12 row no-margin">
+        <div class="col col-12 text-end no-margin">
+          <div class="text-end">
+            <span class="font-bold font-xs">REF</span>
+            <span id="docNumber" class="font-bold font-xs"></span>
+          </div>
+          <div class="text-end">
+            <span class="font-bold font-xs">DATE</span>
+            <span id="docDate" class="font-bold font-xs"></span>
+          </div>
+        </div>
+      </div>
+      <div class="row no-margin col-12 table-responsive pt-3">
+        <div class="col-12">
+          <table class="table font-xxs no-margin">
+            <thead>
+              <tr>
+                <th style="background:#F9A610; color:white; width: 50%;" colspan="2" class="text-start font-bold">PERSON IN CHARGE INFO </td>
+                <th style="background:#F9A610; color:white; width: 50%;" colspan="2" class="text-start font-bold">COMPANY INFO </td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="width: 10%;" class="text-start font-bold">Name</td>
+                <td style="width: 40%;" class="text-start">
+                  <label id="picName" class="font-xxs"></label>
+                </td>
+                <td style="width: 10%;" class="text-start font-bold">Name</td>
+                <td style="width: 40%;" class="text-start">
+                  <label id="companyName" class="font-xxs"></label>
+                </td>
+              </tr>
+              <tr>
+                <td style="width: 10%;" class="text-start font-bold">Email</td>
+                <td style="width: 40%;" class="text-start">
+                  <label id="picEmail" class="font-xxs"></label>
+                </td>
+                <td style="width: 10%;" class="text-start font-bold">Email</td>
+                <td style="width: 40%;" class="text-start">
+                  <label id="companyEmail" class="font-xxs"></label>
+                </td>
+              </tr>
+              <tr>
+                <td style="width: 10%;" class="text-start font-bold">Contact</td>
+                <td style="width: 40%;" class="text-start">
+                  <label id="picContact" class="font-xxs"></label>
+                </td>
+                <td style="width: 10%;" class="text-start font-bold">Contact</td>
+                <td style="width: 40%;" class="text-start">
+                  <label id="companyContact" class="font-xxs"></label>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="4">
+                  <label class="font-bold font-xxs">Service Address : </label>
+                  <br>
+                  <label class="font-xxs" id="billingAddress"></label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <input type="hidden" id="recordId" />
+      <input type="hidden" id="jobId" />
+      <div class="row no-margin col-12 pt-3">
+        <label class="font-xs font-bold col-12 text-center">AKTA RACUN MAKHLUK PEROSAK 1974</label>
+        <label class="font-xs font-bold col-12 text-center">Kaedah-kaedah Racun Makhluk Perosak (Pengendali Kawalan Makhluk Perosak) 2004</label>
+      </div>
+      <div class="row no-margin col-12 pb-3">
+        <label class="font-xs font-bold col-12 text-end d-flex justify-content-center align-items-center">BORANG H</label>
+      </div>
+      <div class="row no-margin col-12">
+        <div class="col-6 col-md-3">
+          <label class="font-xxs">Start</label>
+          <div class="cs-form">
+            <input id="startTime" type="time" class="form-control" value="10:05 AM" />
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <label class="font-xxs">End</label>
+          <div class="cs-form">
+            <input id="endTime" type="time" class="form-control" value="10:05 AM" />
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <label class="font-xxs">Premise Type</label>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" id="premiseType">
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <label class="font-xxs">Target Pest</label>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" id="targetPest">
+          </div>
+        </div>
+      </div>
+      <div class="row no-margin col-12 table-responsive">
+        <div class="col-12">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th style="background:#F9A610; color:white;" class="text-start font-xxs font-bold">Treatment </th>
+                <th style="background:#F9A610; color:white;" class="text-start font-xxs font-bold">Trade Name</th>
+                <th style="background:#F9A610; color:white;" class="text-start font-xxs font-bold">Active Ingredient</th>
+                <th style="background:#F9A610; color:white;" class="text-start font-xxs font-bold">Dilution (ml)</th>
+                <th style="background:#F9A610; color:white;" class="background:#F9A610; color:white;text-start font-xxs font-bold">Quantity (litre) </th>
+                <th style="background:#F9A610; color:white;" class="background:#F9A610; color:white; text-center actionRow align-content-center">
+                  <button id="addRowBtn" class="btn btn-primary btn-sm font-xxs">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row no-margin col-12 pb-5">
+        <label class="font-xxs">(Note: For Post-construction soil treatment, specify the number of holes drilled and the distance between the holes and the amount of termiticide injected into each hole) </label>
+      </div>
+      <div class="row no-margin col-12">
+        <label class="font-xxs">Technician Remark</label>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control font-xxs" id="technicianRemark">
+        </div>
+      </div>
+      <div class="row no-margin col-12">
+        <label class="font-xxs">Customer Feedback</label>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control font-xxs" id="customerFeedback">
+        </div>
+      </div>
+      <div class="row no-margin col-12 col-md-4 no-page-break">
+        <label class="font-xxs">Please feel free to leave us a review:</label>
+        <div class="d-flex justify-content-start">
+          <div class="text-center mb-5">
+            <input type="hidden" id="rating" />
+            <div class="rating">
+              <input type="radio" name="rating" value="5" id="rating5">
+              <label for="rating5">☆</label>
+              <input type="radio" name="rating" value="4" id="rating4">
+              <label for="rating4">☆</label>
+              <input type="radio" name="rating" value="3" id="rating3">
+              <label for="rating3">☆</label>
+              <input type="radio" name="rating" value="2" id="rating2">
+              <label for="rating2">☆</label>
+              <input type="radio" name="rating" value="1" id="rating1">
+              <label for="rating1">☆</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row no-margin col-12 no-page-break">
+        <div class="col-12 d-flex justify-content-end mb-2">
+          <button id="btnClearSignature" class="btn btn-secondary btn-sm font-m col-2">Clear</button>
+          <span class="col-2"></span>
+          <button id="btnStartSigning" class="btn btn-primary btn-sm font-m col-2">Start Signing</button>
+        </div>
+        <div class="col-12">
+          <table class="table table-bordered">
+            <tbody>
+              <tr>
+                <td style="width: 50%" class="font-xxs">
+                  <label>I hereby certify that the above report is correct and true.</label>
+                </td>
+                <td style="width: 50%" class="font-xxs">
+                  <label>Acknowledge receipt of the above report. <label>
+                </td>
+              </tr>
+              <tr>
+                <td class="d-flex justify-content-center" style="height:180px">
+                  <img id="company-signature" class="company-logo" src="" width="180px">
+                </td>
+                <td id="signatureCell" style="height:180px;text-align: center;">
+                  <div id="signature-pad" class="signature-pad no-padding">
+                    <div class="signature-pad--body">
+                      <canvas></canvas>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td style="width: 50%" class="font-xxs">
+                  <label>Applicant Name: Reno Chia Wei Chun</label>
+                </td>
+                <td id="signBy" contenteditable="true" style="width: 50%" class="font-xxs"></td>
+              </tr>
+              <tr>
+                <td style="width: 50%;" class="font-xxs">
+                  <label>Pesticide Applicator License: PA2927 </label>
+                </td>
+                <td style="width: 50%" class="font-xxs">
+                  <label id="signDate" class="font-xxs"></label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <script id="init-script">
+      $(document).ready(function() {
+            const nowDate = moment().format('DD-MM-YYYY');
+            $('#signDate').text(nowDate);
+            var picName = getUrlParameter('picName');
+            var picContact = getUrlParameter('picContact');
+            var picEmail = getUrlParameter('picEmail');
+            var companyLogoLink = "https://raw.githubusercontent.com/miloicekosong/pestsol/main/logo.png";
+            var companySignatureLink = "https://raw.githubusercontent.com/miloicekosong/pestsol/main/reno_sign.png";
+            var companyName = getUrlParameter('companyName');
+            var companyContact = getUrlParameter('companyContact');
+            var companyEmail = getUrlParameter('companyEmail');
+            var billingBuilding = getUrlParameter('billingBuilding');
+            var billingUnit = getUrlParameter('billingUnit');
+            var billingAddr1 = getUrlParameter('billingAddr1');
+            var billingAddr2 = getUrlParameter('billingAddr2');
+            var billingPostalCode = getUrlParameter('billingPostalCode');
+            var billingCity = getUrlParameter('billingCity');
+            var billingState = getUrlParameter('billingState');
+            var billingEmail = getUrlParameter('billingEmail');
+            var docNumber = getUrlParameter('docNumber');
+            var recordId = getUrlParameter('recordId');
+            var docDate = moment(getUrlParameter('date')).format('DD-MM-YYYY');
+            var items = getUrlParameter('items')?.split(',') ?? "";
+            var itemSKU = getUrlParameter('itemsSKU')?.split(',') ?? "";
+            var jobId = getUrlParameter('jobId');
+            var itemTable = $("#tableBody");
+            var itemList = `
+																												<option value="S00028" rate="300" description="">Booklice</option>
+																												<option value="P001" rate="" description="">Insert Trap - Decor 30</option>
+																												<option value="P002" rate="80" description="">Glue Board - 10 PCS</option>
+																												<option value="P003" rate="50">Insert Trap Rent</option>
+																												<option value="P003" rate="45">TRBS</option>
+																												<option value="P004" rate="700">Fly Trap</option>
+																												<option value="P005" rate="1200">Fly Trap (General Pest Control - 1Y12J)</option>
+																												<option value="P006" rate="50">Light Bulb</option>
+																												<option value="P007" rate="80">Gel Bait - Ant</option>
+																												<option value="P009" rate="80">Gel Bait - Cockroach</option>
+																												<option value="P010" rate="">Kleen Up - 5 Litre</option>
+																												<option value="P011" rate="">Keen Up - 25 Litre</option>
+																												<option value="P012" rate="">Keen Up Plus - 5 Litre</option>
+																												<option value="P013" rate="">Keen Up Plus - 25 Litre</option>
+																												<option value="S00001" rate="1800">[contract] Termite Baiting - 3Y</option>
+																												<option value="S00002" rate="3000">[contract] Termite Baiting - 5Y</option>
+																												<option value="S00003" rate="2500">[contract] Corrective Soil Treatment - 5Y</option>
+																												<option value="S00004" rate="600">Termite Spray</option>
+																												<option value="S00005" rate="700">Bedbugs</option>
+																												<option value="S00006" rate="1800">[contract] General Pest Control - 1Y12J</option>
+																												<option value="S00007" rate="1020">[contract] General Pest Control - 1Y6J</option>
+																												<option value="S00008" rate="760">[contract] General Pest Control - 1Y4J</option>
+																												<option value="S00009" rate="630">[contract] General Pest Control - 1Y3J</option>
+																												<option value="S00010" rate="250">General Pest Control</option>
+																												<option value="S00011" rate="3000">[contract] General Pest Control & Misting - 1Y12J</option>
+																												<option value="S00012" rate="1740">[contract] General Pest Control & Misting - 1Y6J</option>
+																												<option value="S00013" rate="1320">[contract] General Pest Control & Misting - 1Y4J</option>
+																												<option value="S00014" rate="1110">[contract] General Pest Control & Misting - 1Y3J</option>
+																												<option value="S00015" rate="400">General Pest Control & Misting</option>
+																												<option value="S00016" rate="300">Misting</option>
+																												<option value="S00017" rate="1500">[contract] Termite Baiting - 2Y</option>
+																												<option value="S00018" rate="240">Larvicide 1M 3 J</option>
+																												<option value="S00019" rate="750">Mosquito Misting 1M 3J</option>
+																												<option value="" rate="">Hours</option>
+																												<option value="" rate="">History</option> `;
+            var tradeNames = ` 
+																												<option skuName="" skuNumber="" value="" activeIngredient=""></option>
+																												<option skuName="Cislin" skuNumber="M0001" value="Cislin" activeIngredient="Deltamethrin">Cislin</option>
+																												<option skuName="Deltacide" skuNumber="M0002" value="Deltacide" activeIngredient="Perperonyl butoxide">Deltacide</option>
+																												<option skuName="Icon cs" skuNumber="M0003" value="Icon cs" activeIngredient="Lambda-cyhalothrin">Icon cs</option>
+																												<option skuName="Maxxthor" skuNumber="M0004" value="Maxxthor" activeIngredient="Bifenthrin">Maxxthor</option>
+																												<option skuName="Seclira" skuNumber="M0005" value="Seclira" activeIngredient="Dinotefuran">Seclira</option>
+																												<option skuName="Temprid" skuNumber="M0006" value="Temprid" activeIngredient="Imidacloprid">Temprid</option>
+																												<option skuName="Tenopa" skuNumber="M0007" value="Tenopa" activeIngredient="Flufenoxuron">Tenopa</option>
+																												<option skuName="Lizard gel bait" skuNumber="M0008" value="Lizard gel bait" activeIngredient="Fipronic">Lizard gel bait</option>
+																												<option skuName="Optigard cockroach bait" skuNumber="M0009" value="Optigard cockroach bait" activeIngredient="Emamectin">Optigard cockroach bait</option> `;
+            $.each(items, function(key, value) {
+              var newRow = ` 
+																												<tr class="itemRow defaultRow font-xxs">
+																													<td class="text-start itemInput itemInputRow" skunumber="${itemSKU[key]}">${this}</td>
+																													<td class="tradeName InputRow">
+																														<select class="form-control font-xxs ddlTradeName" style="width: fit-content;">${tradeNames}</select>
+																													</td>
+																													<td class="text-end font-s align-items-center activeIngredientInput"></td>
+																													<td contenteditable="true" class="text-end font-s align-items-center dilutionInput"></td>
+																													<td contenteditable="true" class="text-end font-s align-items-center quantityInput"></td>
+																													<td class="text-center actionRow">
+																														<button class="btn btn-danger btn-sm deleteRowBtn font-xxs">
+																															<i class="fas fa-times"></i>
+																														</button>
+																													</td>
+																												</tr> `;
+              itemTable.append(newRow);
+            });
+            $("#picName").text(picName);
+            $("#picContact").text(picContact);
+            $("#picEmail").text(picEmail);
+            $("#companyName").text(companyName);
+            $("#companyContact").text(companyContact);
+            $("#companyEmail").text(companyEmail);
+            $("#docNumber").text(docNumber);
+            $("#docDate").text(docDate);
+            $("#recordId").val(recordId);
+            $("#jobId").val(jobId);
+            $("#company-logo").attr("src", companyLogoLink);
+            $("#company-signature").attr("src", companySignatureLink);
+            formatAddress(billingBuilding, billingUnit, billingAddr1, billingAddr2, billingPostalCode, billingCity, billingState);
+            $('#addRowBtn').click(function() {
+              var newRow = ` 
+																												<tr class="itemRow">
+																													<td class="text-start font-s itemInputRow">
+																														<select class="form-control font-xs ddlItem" style="width: fit-content;">${itemList}</select>
+																													</td>
+																													<td class="tradeNameInputRow">
+																														<select class="form-control font-xs ddlTradeName" style="width: fit-content;">${tradeNames}</select>
+																													</td>
+																													<td class="text-end font-s align-items-center activeIngredientInput"></td>
+																													<td contenteditable="true" class="text-end font-s align-items-center dilutionInput"></td>
+																													<td contenteditable="true" class="text-end font-s align-items-center quantityInput"></td>
+																													<td class="text-center actionRow">
+																														<button class="btn btn-danger btn-sm deleteRowBtn font-xxs">
+																															<i class="fas fa-times"></i>
+																														</button>
+																													</td>
+																												</tr> `;
+              itemTable.append(newRow);
+              rebindItemRowEvents();
+            });
+            $('#tableBody').on('click', '.deleteRowBtn', function() {
+              $(this).closest('tr').remove();
+            });
+            $('.main-container').on('focus', '[contenteditable="true"]', function() {
+              var originalText = $(this).text().trim();
+              var originalValue = $(this).val().trim();
+              $(this).attr('data-original-text', originalText);
+              $(this).attr('data-original-value', originalValue);
+              $(this).text('');
+              $(this).val('');
+            }).on('blur', '[contenteditable="true"]', function() {
+              if ($(this).text().trim() === '') {
+                $(this).text($(this).attr('data-original-text'));
+              }
+              if ($(this).val().trim() === '') {
+                $(this).val($(this).attr('data-original-value'));
+              }
+            });
+            $("img").each(async function() {
+              var imageLink = $(this).attr('src');
+              if (imageLink.startsWith('http')) {
+                var base64 = await imageToBase64(imageLink);
+                $(this).attr('src', base64);
+              }
+            });
+            $(".rating").change(function() {
+              var rating = $('input[name="rating"]:checked').val();
+              $("#rating").val(rating);
+            });
+            rebindItemRowEvents();
+
+            function rebindItemRowEvents() {
+              $(".ddlTradeName").unbind().change(function() {
+                var activeIngredientInput = $(this).parent().parent().find(".activeIngredientInput");
+                var activeIngredient = $(this).find(":selected").attr('activeIngredient');
+                activeIngredientInput.text(activeIngredient);
+              });
+              $(".dilutionInput, .quantityInput").unbind().on('blur', function() {
+                if (!$.isNumeric($(this).text())) $(this).text("");
+              });
+              $(".ddlTradeName").trigger("change");
+            }
+
+            function getUrlParameter(paramName) {
+              var searchParams = new URLSearchParams(window.location.search);
+              return searchParams.get(paramName);
+            }
+
+            function imageToBase64(url) {
+              return fetch(url).then(response => {
+                if (!response.ok) {
+                  throw new Error('Failed to load image');
+                }
+                return response.blob();
+              }).then(blob => {
+                return new Promise((resolve, reject) => {
+                  let reader = new FileReader();
+                  reader.onloadend = function() {
+                    resolve(reader.result);
+                  };
+                  reader.onerror = function() {
+                    reject(new Error('Failed to read blob as data URL'));
+                  };
+                  reader.readAsDataURL(blob);
+                });
+              });
+            };
+
+            function formatAddress(billingBuilding, billingUnit, billingAddr1, billingAddr2, billingPostalCode, billingCity, billingState) {
+              var formattedAddress = '';
+              if (billingBuilding) {
+                formattedAddress += billingBuilding + ' < br > '; } if (billingUnit) { formattedAddress += billingUnit; } if (billingAddr1) { formattedAddress += (billingUnit ? ', ' : '
+                ') + billingAddr1 + ', '; } if (billingAddr2) { formattedAddress += billingAddr2 + ', '; } if (billingPostalCode || billingCity || billingState) { formattedAddress += (billingPostalCode ? billingPostalCode + '
+                ' : '
+                ') + (billingCity ? billingCity + ', ' : '
+                ') + (billingState ? billingState : '
+                '); } $("#billingAddress").html(formattedAddress); } }) 
+    </script>
+    <script>
+      $(document).ready(function() {
+            var confirmationModal = $("#confirmation-modal");
+            var confirmationMessage = $("#confirmation-message");
+            var loader = $("#loader");
+            var signaturePad;
+            var btnSubmit = $("#btnSubmit");
+            var btnConfirmModal = $("#btnConfirmModal");
+            var btnStartSigning = $("#btnStartSigning");
+            var btnClearSignature = $("#btnClearSignature");
+            var signaturePadContainer = $("#signature-pad");
+            var btnDownloadPdf = $("#btnDownloadPdf");
+            btnSubmit.click(function() {
+              if (typeof signaturePad !== 'undefined' && signaturePad.isEmpty()) {
+                confirmationMessage.text("Please provide a signature before submitting.");
+                confirmationModal.modal('toggle');
+                return;
+              } else {
+                confirmationMessage.text("Are you sure to submit this report?");
+                confirmationModal.modal('toggle');
+                return;
+              }
+            });
+            btnConfirmModal.click(async function() {
+              if (typeof signaturePad !== 'undefined' && signaturePad.isEmpty()) {
+                confirmationModal.modal('toggle');
+                return;
+              } else {
+                confirmationModal.modal('toggle');
+                submitQuotation();
+              }
+            });
+            btnStartSigning.click(function() {
+              signaturePadContainer.show();
+              initSigningPad();
+              signaturePadContainer.show();
+            });
+            btnDownloadPdf.click(async function() {
+              btnDownloadPdf.hide();
+              $("canvas").remove();
+              var clonedDoc = document.cloneNode(true);
+              var modifiedHTML = clonedDoc.documentElement.outerHTML;
+              convertToPDF(modifiedHTML);
+            });
+
+            function flattenDocument() {
+              $('input, select, textarea').prop('readonly', true);
+              $('[contenteditable]').attr('contenteditable', 'false');
+              $('.actionRow').remove();
+              var selectedServices = [];
+              var selectedTradeNames = [];
+              $(".itemInput").each(function() {
+                selectedServices.push({
+                  itemSKU: $(this).attr('skunumber'),
+                  itemName: $(this).text()
+                });
+              });
+              $(".ddlItem").each(function() {
+                selectedServices.push({
+                  itemSKU: $(this).val(),
+                  itemName: $(this).find('option:selected').text()
+                });
+              });
+              $(".ddlTradeName").each(function() {
+                selectedTradeNames.push({
+                  itemSKU: $(this).find('option:selected').attr('skunumber'),
+                  itemName: $(this).val()
+                });
+              });
+              var index = 0;
+              $('.ddlItem').each(function() {
+                $(this).replaceWith(`
+																													<span class='itemInput' skunumber='${selectedServices[index].itemSKU}'>${selectedServices[index].itemName}</span>`);
+                index = index + 1;
+              });
+              index = 0;
+              $('.ddlTradeName').each(function() {
+                $(this).replaceWith(`
+																													<span class='tradeNameInput' itemSKU='${selectedTradeNames[index].itemSKU}'>${selectedTradeNames[index].itemName}</span>`);
+                index = index + 1;
+              });
+              $("input").each(function() {
+                $(this).attr("value", $(this).val());
+              });
+              $('#init-script').remove();
+            }
+            async function submitQuotation() {
+              var modifiedHTML = await flattenDocumentForSubmission();
+              var services = [];
+              var docNumber = $("#docNumber").text();
+              var recordId = $("#recordId").val();
+              var jobId = $("#jobId").val().split(',');
+              var picEmail = $("#picEmail").text();
+              var picName = $("#picName").text();
+              var companyEmail = $("#companyEmail").text();
+              var startTime = $("#startTime").val();
+              var endTime = $("#endTime").val();
+              var premiseType = $("#premiseType").val();
+              var targetPest = $("#targetPest").val();
+              var technicianRemark = $("#technicianRemark").val();
+              var customerFeedback = $("#customerFeedback").val();
+              var rating = parseInt($("#rating").val());
+              var signBy = $("#signBy").text();
+              var startDateTime = convertTimeToTimestamp(startTime);
+              var endDateTime = convertTimeToTimestamp(endTime);
+              $(".itemRow").each(function() {
+                services.push({
+                  item: $(this).find(".itemInput").attr('skunumber'),
+                  itemName: $(this).find('.itemInput').text(),
+                  quantity: parseFloat($(this).find(".quantityInput").text().replace(/, /g, '')),
+                  tradeName: $(this).find('.tradeNameInput').text(),
+                  activeIngredient: $(this).find('.activeIngredientInput').text(),
+                  dilution: parseFloat($(this).find('.dilutionInput').text().replace(/, /g, '')),
+                });
+              });
+              if (isNaN(rating)) {
+                rating = 0;
+              }
+              var url = 'https://connect.pabbly.com/workflow/sendwebhookdata/IjU3NjUwNTY0MDYzNDA0MzY1MjZjNTUzNDUxMzYi_pc';
+              var requestBody = {
+                services: services,
+                startTime: startDateTime,
+                endTime: endDateTime,
+                premiseType: premiseType,
+                targetPest: targetPest,
+                technicianRemark: technicianRemark,
+                customerFeedback: customerFeedback,
+                rating: rating,
+                signBy: signBy,
+                docNumber: docNumber,
+                recordId: recordId,
+                jobId: jobId,
+                picEmail: picEmail,
+                picName: picName,
+                companyEmail: companyEmail,
+                htmlContent: modifiedHTML,
+              };
+              $.ajax({
+                url: url,
+                type: 'POST',
+                data: JSON.stringify(requestBody),
+                contentType: 'multipart/form-data',
+                success: function(response) {
+                  console.log('Success: ', response);
+                },
+                error: function(xhr, status, error) {
+                  console.error('Error: ', error);
+                }
+              });
+              setTimeout(() => {
+                $(".circle").hide();
+                $(".message-text").text("Report Submitted Successfully");
+                $("#success-card").show();
+              }, 2000);
+              var newTab = window.open();
+              newTab.document.open();
+              newTab.document.write(modifiedHTML);
+              newTab.document.close();
+            }
+            async function flattenDocumentForSubmission() {
+                flattenDocument();
+                var selectedServices = [];
+                btnSubmit.hide();
+                btnStartSigning.hide();
+                btnClearSignature.hide();
+                confirmationModal.remove();
+                $(".modal-backdrop").remove();
+                btnDownloadPdf.show();
+                $("body").removeClass("modal-open");
+                $("body").css("overflow", "scroll");
+                $(".signature-pad--body").first().hide();
+                var originalCanvas = document.querySelector("#signature-pad canvas");
+                var signatureImage = originalCanvas.toDataURL("image/png");
+                $("#signatureCell").html(`
+																													<img src="${signatureImage}" class="signature-image" alt="Signature" width="180px">`);
+                var ratingContainer = $("div.rating");
+                var rating = $("#rating").val();
+                ratingContainer.html("");
+                for (var i = 0; i < 5; i++) {
+                  if (i < rating) ratingContainer.prepend("  < label class = 'reviewed-star' > ★ < /label>"); else ratingContainer.prepend(" < label class = 'unreviewed-star' > ★ < /label>"); } $("canvas").remove(); var styleElement = document.createElement('style'); var clonedDoc = document.cloneNode(true); $(clonedDoc).find('head').append(styleElement); var modifiedHTML = clonedDoc.documentElement.outerHTML; modifiedHTML = modifiedHTML.replace(/initSigningPad\(\);
+                      /g, ''); return modifiedHTML; } async function convertToPDF(htmlContent) { var docNumber = $("#docNumber").text(); var docName = `Service Report ${docNumber}`; const options = { filename: docName, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }; html2pdf().from(htmlContent).set(options).toPdf().output('blob').then(function (pdfBlob) { var link = document.createElement('a'); link.href = URL.createObjectURL(pdfBlob); console.log(link.href); link.download = docName; link.click(); }).catch(error => { console.error("Error generating PDF:", error); btnDownloadPdf.show(); }); } function convertTimeToTimestamp(timeInput) { const today = moment(); const time = moment(timeInput, 'HH:mm'); const combined = today.set({ hour: time.get('hour'), minute: time.get('minute'), second: 0, millisecond: 0 }); return combined.valueOf(); }; initSigningPad(); function initSigningPad() { var wrapper = document.getElementById("signature-pad"); var canvas = wrapper.querySelector("canvas"); var clearButton = document.getElementById("btnClearSignature"); const ratio = Math.max(window.devicePixelRatio || 1, 1); canvas.width = canvas.offsetWidth * ratio; canvas.height = canvas.offsetHeight * ratio; canvas.getContext("2d").scale(ratio, ratio); signaturePad = new SignaturePad(canvas, { backgroundColor: 'rgb(255, 255, 255)' }); clearButton.addEventListener("click", function (event) { signaturePad.clear(); }); $("#signature-pad").hide(); } }); 
+    </script>
+  </body>
+</html>
